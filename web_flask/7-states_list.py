@@ -1,27 +1,28 @@
 #!/usr/bin/python3
+"""
 
-"""Starts a Flask web application"""
+    Runs a Flask web application on 0.0.0.0:5000
 
-from models import storage
-from models.state import State
+"""
+from ../models import storage
 from flask import Flask
 from flask import render_template
-
 app = Flask(__name__)
 
 
 @app.route('/states_list', strict_slashes=False)
 def states():
-    """Comment"""
-    return render_template('7-states_list.html',
-                           states=storage.all('State').values())
+    """ Returns an HTML page of all States sorted by name """
+    states = storage.all("State")
+    return render_template('7-states_list.html', states=states)
 
 
 @app.teardown_appcontext
-def teardown(self):
-    """Remove the current SQLAlchemy Session"""
+def teardown(exc):
+    """ Removes the current SQLAlchemy session. """
     storage.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    """ Run on 0.0.0.0 """
     app.run(host='0.0.0.0')
